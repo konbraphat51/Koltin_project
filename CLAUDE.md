@@ -134,3 +134,11 @@ export default {
 ## Claude Notes
 
 =Claude can freely edit below this line. Use this area to share project knowledge throught different chat sessions. Capture conventions, structure, commands, and gotchas so that agents joining later stay consistent with existing decisions.=
+
+- Status: design phase only (see `/Docs/`). No code yet. This folder is not a git repository yet.
+- Repo layout (one pnpm workspace): `/App` (React Native + Expo, TypeScript), `/Server` (Cloudflare Worker, Hono, D1), `/Shared` (Zod schemas, normalization), `/Docs`.
+- Frontend is React Native, chosen explicitly by the user. This overrides the "Use Vue for frontend / SFC style" rule above for `/App`.
+- Naming exception: names fixed by tools (`package.json`, `app.json`, Expo Router's `app/`, locale files like `en.json`) keep their conventional form.
+- LLM: OpenAI API, cheap vision model, the user's own key, model selectable. Always behind `LlmClient`.
+- Server never lets clients write menus. It only returns developer-entered menus, records not-found requests, and relays Open Food Facts contributions.
+- `Docs/Requirements.md` is still Japanese only (no English primary yet).
