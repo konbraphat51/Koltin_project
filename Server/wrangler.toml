@@ -1,7 +1,6 @@
 name = "nutri-server"
 main = "src/Index.ts"
 compatibility_date = "2024-11-01"
-compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "DB"

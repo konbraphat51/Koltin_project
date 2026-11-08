@@ -20,6 +20,14 @@ async function seedMenu() {
 
 beforeEach(seedMenu);
 
+describe("cors", () => {
+  it("answers preflight requests with the allowed headers", async () => {
+    const res = await call("/v1/menus?q=x", { method: "OPTIONS", headers: { Origin: "http://localhost:8081", "Access-Control-Request-Method": "GET", "Access-Control-Request-Headers": "x-installation-id" } });
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe("*");
+    expect(res.headers.get("Access-Control-Allow-Headers")?.toLowerCase()).toContain("x-installation-id");
+  });
+});
+
 describe("menus", () => {
   it("lists chains", async () => {
     const res = await call("/v1/chains");
