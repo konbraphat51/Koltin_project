@@ -2,7 +2,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { sumNutrients } from "@nutri/shared";
 import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { subscribeDiaryChanged } from "../../src/ui/DiaryEvents";
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
 import { addDays, formatDate } from "../../src/domain/Dates";
@@ -35,6 +36,8 @@ export default function TodayScreen() {
       void reload(date);
     }, [reload, date]),
   );
+
+  useEffect(() => subscribeDiaryChanged(() => void reload(date)), [reload, date]);
 
   const total = sumNutrients(entries.map((e) => e.nutrients));
   const removeEntry = (entry: DiaryEntry) =>

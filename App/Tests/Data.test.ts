@@ -205,6 +205,23 @@ describe("ClientServer", () => {
   });
 });
 
+describe("default fetch", () => {
+  it("calls the global fetch without binding it to the client (browsers throw Illegal invocation otherwise)", async () => {
+    const original = globalThis.fetch;
+    let boundTo: unknown = "unset";
+    globalThis.fetch = function (this: unknown) {
+      boundTo = this;
+      return Promise.resolve(jsonResponse([]));
+    } as unknown as typeof fetch;
+    try {
+      await new ClientServer("https://example.test", "u").searchMenus("x");
+      expect(boundTo).not.toBeInstanceOf(ClientServer);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+});
+
 describe("ClientOpenFoodFacts", () => {
   it("returns null for 404 and maps found products", async () => {
     expect(await new ClientOpenFoodFacts((async () => jsonResponse({ status: 0 }, 404)) as unknown as typeof fetch).findByBarcode("1")).toBeNull();

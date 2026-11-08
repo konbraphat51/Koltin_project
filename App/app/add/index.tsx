@@ -27,6 +27,7 @@ export default function AddScreen() {
   const [chainResults, setChainResults] = useState<FoodItem[]>([]);
   const [chainState, setChainState] = useState<ChainState>("idle");
   const [requestChain, setRequestChain] = useState("");
+  const [requestMenuName, setRequestMenuName] = useState("");
 
   const params = { date, meal };
   const trimmed = query.trim();
@@ -44,6 +45,7 @@ export default function AddScreen() {
 
   useEffect(() => {
     setChainState("idle");
+    setRequestMenuName(trimmed);
   }, [trimmed]);
 
   const select = async (item: FoodItem) => {
@@ -64,9 +66,10 @@ export default function AddScreen() {
 
   const requestMenu = async () => {
     try {
-      const serverRequestId = await server.createMenuRequest(requestChain.trim(), trimmed);
-      const pendingId = await pending.add(serverRequestId, requestChain.trim(), trimmed);
-      router.push({ pathname: "/add/manual", params: { ...params, pendingId: String(pendingId), name: trimmed } });
+      const menuName = requestMenuName.trim();
+      const serverRequestId = await server.createMenuRequest(requestChain.trim(), menuName);
+      const pendingId = await pending.add(serverRequestId, requestChain.trim(), menuName);
+      router.push({ pathname: "/add/manual", params: { ...params, pendingId: String(pendingId), name: menuName } });
     } catch {
       setChainState("error");
     }
@@ -145,8 +148,8 @@ export default function AddScreen() {
               <TextHeading>{t("add.requestTitle")}</TextHeading>
               <TextBody muted small>{t("add.requestHint")}</TextBody>
               <Field label={t("add.chainName")} value={requestChain} onChangeText={setRequestChain} testID="request-chain" />
-              <Field label={t("add.menuName")} value={trimmed} onChangeText={setQuery} />
-              <Button label={t("add.requestButton")} onPress={() => void requestMenu()} disabled={requestChain.trim() === ""} testID="request-menu" />
+              <Field label={t("add.menuName")} value={requestMenuName} onChangeText={setRequestMenuName} />
+              <Button label={t("add.requestButton")} onPress={() => void requestMenu()} disabled={requestChain.trim() === "" || requestMenuName.trim() === ""} testID="request-menu" />
             </Card>
           ) : null}
         </>

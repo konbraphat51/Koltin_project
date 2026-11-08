@@ -2,7 +2,6 @@
 import * as Crypto from "expo-crypto";
 import { Stack } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
-import Storage from "expo-sqlite/kv-store";
 import { StatusBar } from "expo-status-bar";
 import { Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,19 +9,25 @@ import { ActivityIndicator } from "react-native";
 import { registerBackgroundSync } from "../src/data/BackgroundSync";
 import { adaptExpoSqlite } from "../src/data/AdapterExpoSqlite";
 import { migrateDatabase } from "../src/data/Migrations";
+import { keyValueStore } from "../src/data/StorageKeyValue";
 import { StoreSettings } from "../src/data/StoreSettings";
 import { syncPendingRequests } from "../src/data/SyncPendingRequest";
 import { initializeI18n } from "../src/i18n/Index";
+import { notifyDiaryChanged } from "../src/ui/DiaryEvents";
 import { ServicesProvider, useServices } from "../src/ui/Services";
 
-initializeI18n(new StoreSettings(Storage, () => Crypto.randomUUID()).getLanguage());
+initializeI18n(new StoreSettings(keyValueStore, () => Crypto.randomUUID()).getLanguage());
 
 /** Syncs pending chain requests once at start; offline failures are ignored. */
 function SyncOnStart() {
   const { server, pending, food, diary } = useServices();
   useEffect(() => {
     void registerBackgroundSync();
-    syncPendingRequests(server, pending, food, diary).catch(() => undefined);
+    syncPendingRequests(server, pending, food, diary)
+      .then((result) => {
+        if (result.resolved > 0) notifyDiaryChanged();
+      })
+      .catch(() => undefined);
   }, [server, pending, food, diary]);
   return null;
 }
