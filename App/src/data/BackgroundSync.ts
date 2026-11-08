@@ -2,7 +2,6 @@
 import * as BackgroundTask from "expo-background-task";
 import * as TaskManager from "expo-task-manager";
 import { openDatabaseAsync } from "expo-sqlite";
-import Storage from "expo-sqlite/kv-store";
 import * as Crypto from "expo-crypto";
 import { Platform } from "react-native";
 import { adaptExpoSqlite } from "./AdapterExpoSqlite";
@@ -11,6 +10,7 @@ import { migrateDatabase } from "./Migrations";
 import { RepositoryDiary } from "./RepositoryDiary";
 import { RepositoryFood } from "./RepositoryFood";
 import { RepositoryPending } from "./RepositoryPending";
+import { keyValueStore } from "./StorageKeyValue";
 import { StoreSettings } from "./StoreSettings";
 import { syncPendingRequests } from "./SyncPendingRequest";
 
@@ -22,7 +22,7 @@ if (Platform.OS !== "web") {
     try {
       const db = adaptExpoSqlite(await openDatabaseAsync("nutri.db"));
       await migrateDatabase(db);
-      const settings = new StoreSettings(Storage, () => Crypto.randomUUID());
+      const settings = new StoreSettings(keyValueStore, () => Crypto.randomUUID());
       await syncPendingRequests(new ClientServer(serverUrl, settings.getInstallationId()), new RepositoryPending(db), new RepositoryFood(db), new RepositoryDiary(db));
       return BackgroundTask.BackgroundTaskResult.Success;
     } catch {
