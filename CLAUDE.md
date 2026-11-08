@@ -135,10 +135,13 @@ export default {
 
 =Claude can freely edit below this line. Use this area to share project knowledge throught different chat sessions. Capture conventions, structure, commands, and gotchas so that agents joining later stay consistent with existing decisions.=
 
-- Status: design phase only (see `/Docs/`). No code yet. This folder is not a git repository yet.
+- Status: MVP implemented (Shared, Server, App). Design docs are in `/Docs/`; setup and commands are in `/README.md`.
 - Repo layout (one pnpm workspace): `/App` (React Native + Expo, TypeScript), `/Server` (Cloudflare Worker, Hono, D1), `/Shared` (Zod schemas, normalization), `/Docs`.
 - Frontend is React Native, chosen explicitly by the user. This overrides the "Use Vue for frontend / SFC style" rule above for `/App`.
 - Naming exception: names fixed by tools (`package.json`, `app.json`, Expo Router's `app/`, locale files like `en.json`) keep their conventional form.
 - LLM: OpenAI API, cheap vision model, the user's own key, model selectable. Always behind `LlmClient`.
 - Server never lets clients write menus. It only returns developer-entered menus, records not-found requests, and relays Open Food Facts contributions.
+- Commands: `pnpm test` / `pnpm typecheck` at the root run every package. Server needs `wrangler.test.toml` (has `nodejs_compat`, required only by vitest-pool-workers); the deployed worker must NOT enable `nodejs_compat` (it pulls in `node:net` and breaks `wrangler dev`).
+- Gotchas: never use bare `fetch` as a constructor default (browsers throw "Illegal invocation"; use `defaultFetch`). expo-sqlite cannot run sync on web at module load, so settings use localStorage there (`StorageKeyValue.ts`). App tests run repositories on `node:sqlite` through `Tests/Helpers/SqliteAdapter.ts`.
+- Web debugging: expo-sqlite on web needs cross-origin isolation headers, which Metro's dev server does not send; use a small header-adding proxy (see README).
 - `Docs/Requirements.md` is still Japanese only (no English primary yet).

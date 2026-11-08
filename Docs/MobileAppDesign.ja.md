@@ -8,7 +8,7 @@ React Native（Expo）アプリ。まず Android 向け。English version: [Mobi
 
 ## レイヤー
 
-`ui`（Expo Router の画面、小さなコンポーネント、hooks）→ `domain`（ユースケース、モデル、リポジトリのインターフェース）→ `data`（Drizzle 経由の expo-sqlite、外部 API、リポジトリ実装）
+`ui`（Expo Router の画面、小さなコンポーネント、hooks）→ `domain`（ユースケース、モデル、リポジトリのインターフェース）→ `data`（小さな `SqlDatabase` インターフェース越しの expo-sqlite、外部 API、リポジトリ実装）
 
 クラス名は CLAUDE.md に従う（主となる名詞を先頭に置く。例: `SourceOpenFoodFacts`、`ClientLlm`）。
 
@@ -58,7 +58,7 @@ classDiagram
 
 MVP の基本セット: エネルギー(kcal)、たんぱく質、脂質、炭水化物、食物繊維、食塩相当量。100 g あたりと 1 食分あたりで保持する。型と Zod スキーマは `Shared` パッケージに置く。
 
-## ローカル DB（expo-sqlite、Drizzle）
+## ローカル DB（expo-sqlite）
 
 | テーブル                 | カラム                                                                                         |
 | ------------------------ | ---------------------------------------------------------------------------------------------- |
@@ -67,7 +67,7 @@ MVP の基本セット: エネルギー(kcal)、たんぱく質、脂質、炭�
 | `favorites`              | food_item_id, created_at                                                                       |
 | `pending_chain_requests` | id, server_request_id, chain_name, menu_name, status                                           |
 
-文部科学省データは別の読み取り専用 DB とし、アセット（expo-asset）として同梱して、初回起動時にドキュメントディレクトリへコピーする。プロフィール・目標・設定は MMKV、OpenAI キーは expo-secure-store に保存する。
+文部科学省データは `assets/Mext/MextFoods.json`（公式の Excel から `pnpm build:mext` で生成）として同梱し、メモリ上で検索する。ユーザーが選んだ食品は `food_items` にコピーする。プロフィール・目標・設定はキーバリューストア（expo-sqlite の kv-store。Web は localStorage）、OpenAI キーは expo-secure-store に保存する。
 
 ## 目標値
 
@@ -153,5 +153,5 @@ sequenceDiagram
 
 ## セキュリティ
 
-- OpenAI キーは expo-secure-store（Android Keystore）に保存し、ログと、永続化するクエリキャッシュには含めない。
+- OpenAI キーは expo-secure-store（Android Keystore）に保存し、ログには出さない。
 - サーバー呼び出しには、レート制限用のインストール ID（ランダムな UUID）を付ける。

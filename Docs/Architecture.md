@@ -17,15 +17,15 @@ flowchart LR
 
 ## Where Data Lives
 
-| Data                              | Location                              | Why                                                |
-| --------------------------------- | ------------------------------------- | -------------------------------------------------- |
-| Diary, my foods, favorites, goals | Device (expo-sqlite / MMKV)           | Per-user data, no server needed                    |
-| MEXT food composition table       | Bundled in the app (read-only SQLite) | Fixed data of a few MB                             |
-| User's OpenAI API key             | Device (expo-secure-store, Keystore)  | The user provides it; never sent to our server     |
-| OpenAI model name, other settings | Device (MMKV)                         | Not secret                                         |
-| Chain menu nutrition              | Server (D1)                           | Shared by all users, entered by the developer only |
-| Not-found requests                | Server (D1)                           | Collected for the developer's manual batch         |
-| OFF shared account password       | Worker secret                         | Must not ship in the app                           |
+| Data                              | Location                                    | Why                                                |
+| --------------------------------- | ------------------------------------------- | -------------------------------------------------- |
+| Diary, my foods, favorites, goals | Device (expo-sqlite)                        | Per-user data, no server needed                    |
+| MEXT food composition table       | Bundled in the app (JSON, in-memory search) | Fixed data of a few MB                             |
+| User's OpenAI API key             | Device (expo-secure-store, Keystore)        | The user provides it; never sent to our server     |
+| OpenAI model name, other settings | Device (kv-store; localStorage on web)      | Not secret                                         |
+| Chain menu nutrition              | Server (D1)                                 | Shared by all users, entered by the developer only |
+| Not-found requests                | Server (D1)                                 | Collected for the developer's manual batch         |
+| OFF shared account password       | Worker secret                               | Must not ship in the app                           |
 
 ## Server Responsibilities
 
@@ -35,7 +35,7 @@ flowchart LR
 
 ## Tech Stack
 
-- App: React Native + Expo (development builds), TypeScript (strict), Expo Router, expo-sqlite + Drizzle ORM, react-native-mmkv, expo-secure-store, expo-camera (barcode scanning and photos), expo-background-task (sync), TanStack Query, Zustand, react-native-gifted-charts, i18next + expo-localization, Jest + React Native Testing Library
+- App: React Native + Expo (development builds), TypeScript (strict), Expo Router, expo-sqlite (data and kv-store), expo-secure-store, expo-camera (barcode scanning), expo-image-picker and expo-image-manipulator (photos), expo-background-task (sync), i18next + expo-localization, Jest + React Native Testing Library
 - Shared: a `Shared` package (Zod schemas, normalization, nutrient types) used by both App and Server
 - Server: TypeScript, pnpm, Hono on Cloudflare Workers, D1, Zod, Vitest (`@cloudflare/vitest-pool-workers`), wrangler
 - LLM: OpenAI API (cheap vision-capable model, user selectable, Structured Outputs) behind an `LlmClient` interface
