@@ -1,13 +1,13 @@
 /** Client of our Cloudflare Worker API (`/v1`): chain menus, not-found requests and the OFF relay. */
 import { ChainSchema, installationHeader, MenuItemSchema, MenuRequestStatusSchema, type MenuItem, type MenuRequestStatus, type OffProductInput } from "@nutri/shared";
 import { z } from "zod";
-import type { FetchFn } from "./ClientOpenFoodFacts";
+import { defaultFetch, type FetchFn } from "./ClientOpenFoodFacts";
 
 export class ClientServer {
   constructor(
     private readonly baseUrl: string,
     private readonly installationId: string,
-    private readonly fetchFn: FetchFn = fetch,
+    private readonly fetchFn: FetchFn = defaultFetch,
   ) {}
 
   private async request<T>(path: string, schema: z.ZodType<T>, init?: RequestInit): Promise<T> {

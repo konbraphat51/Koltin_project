@@ -1,6 +1,6 @@
 /** Extracts nutrition facts from product photos with the OpenAI API, using the user's own key. */
 import { extractedProductJsonSchema, parseLlmProduct, type ExtractedProduct } from "../domain/ParserLlmProduct";
-import type { FetchFn } from "./ClientOpenFoodFacts";
+import { defaultFetch, type FetchFn } from "./ClientOpenFoodFacts";
 
 /** Provider-neutral interface so the LLM provider can be swapped. */
 export interface ClientLlm {
@@ -30,7 +30,7 @@ export class ClientOpenAi implements ClientLlm {
   constructor(
     private readonly apiKey: string,
     private readonly model: string,
-    private readonly fetchFn: FetchFn = fetch,
+    private readonly fetchFn: FetchFn = defaultFetch,
   ) {}
 
   async extractProduct(imagesBase64: string[]): Promise<ExtractedProduct> {

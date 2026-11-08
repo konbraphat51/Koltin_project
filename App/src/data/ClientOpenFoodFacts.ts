@@ -7,8 +7,11 @@ const fields = "product_name,product_name_ja,brands,serving_quantity,nutriments"
 
 export type FetchFn = typeof fetch;
 
+/** Calls the global fetch unbound; passing `fetch` as a method default throws "Illegal invocation" in browsers. */
+export const defaultFetch: FetchFn = (input, init) => fetch(input, init);
+
 export class ClientOpenFoodFacts {
-  constructor(private readonly fetchFn: FetchFn = fetch) {}
+  constructor(private readonly fetchFn: FetchFn = defaultFetch) {}
 
   /** Returns null when the product is unknown or has no nutrition data. */
   async findByBarcode(barcode: string): Promise<FoodItem | null> {
