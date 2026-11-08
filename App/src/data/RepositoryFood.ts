@@ -11,20 +11,14 @@ export class RepositoryFood {
   /** Inserts the item, or updates it when (source, sourceRef) already exists. Returns the row ID. */
   async save(item: FoodItem): Promise<number> {
     if (item.id !== null) {
-      await this.db.runAsync(
-        `UPDATE food_items SET name = ?, brand = ?, serving_g = ?, energy_kcal = ?, protein_g = ?, fat_g = ?, carbohydrate_g = ?, fiber_g = ?, salt_g = ? WHERE id = ?`,
-        [item.name, item.brand, item.servingG, ...toNutrientParams(item.per100g), item.id],
-      );
+      await this.db.runAsync(`UPDATE food_items SET name = ?, brand = ?, serving_g = ?, energy_kcal = ?, protein_g = ?, fat_g = ?, carbohydrate_g = ?, fiber_g = ?, salt_g = ? WHERE id = ?`, [item.name, item.brand, item.servingG, ...toNutrientParams(item.per100g), item.id]);
       return item.id;
     }
     if (item.sourceRef !== null) {
       const existing = await this.db.getFirstAsync<{ id: number }>("SELECT id FROM food_items WHERE source = ? AND source_ref = ?", [item.source, item.sourceRef]);
       if (existing) return this.save({ ...item, id: existing.id });
     }
-    const result = await this.db.runAsync(
-      `INSERT INTO food_items (source, source_ref, name, brand, serving_g, ${nutrientColumnList}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [item.source, item.sourceRef, item.name, item.brand, item.servingG, ...toNutrientParams(item.per100g)],
-    );
+    const result = await this.db.runAsync(`INSERT INTO food_items (source, source_ref, name, brand, serving_g, ${nutrientColumnList}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [item.source, item.sourceRef, item.name, item.brand, item.servingG, ...toNutrientParams(item.per100g)]);
     return result.lastInsertRowId;
   }
 
@@ -77,10 +71,7 @@ export class RepositoryFood {
 
   /** Most frequently logged foods. */
   async listFrequent(limit = 20): Promise<FoodItem[]> {
-    const rows = await this.db.getAllAsync<FoodItemRow>(
-      `SELECT ${foodColumns.replace(/(\w+)/g, "f.$1")} FROM diary_entries d JOIN food_items f ON f.id = d.food_item_id GROUP BY f.id ORDER BY COUNT(*) DESC, MAX(d.id) DESC LIMIT ?`,
-      [limit],
-    );
+    const rows = await this.db.getAllAsync<FoodItemRow>(`SELECT ${foodColumns.replace(/(\w+)/g, "f.$1")} FROM diary_entries d JOIN food_items f ON f.id = d.food_item_id GROUP BY f.id ORDER BY COUNT(*) DESC, MAX(d.id) DESC LIMIT ?`, [limit]);
     return rows.map(toFoodItem);
   }
 }

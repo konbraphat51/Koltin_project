@@ -41,7 +41,14 @@ export default function HistoryScreen() {
 
   return (
     <ScreenScroll>
-      <Segmented<Range> options={[{ value: "week", label: t("history.week") }, { value: "month", label: t("history.month") }]} value={range} onChange={setRange} />
+      <Segmented<Range>
+        options={[
+          { value: "week", label: t("history.week") },
+          { value: "month", label: t("history.month") },
+        ]}
+        value={range}
+        onChange={setRange}
+      />
       <Segmented<Metric>
         options={[
           { value: "energyKcal", label: t("nutrient.energyKcal") },

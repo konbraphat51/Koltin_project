@@ -16,7 +16,9 @@ const firstDataRow = 12;
 /** Converts a MEXT cell ("(1.2)", "Tr", "-", "*", numbers) to a number; non-numeric markers count as 0. */
 export function parseMextCell(cell: unknown): number {
   if (typeof cell === "number") return cell;
-  const text = String(cell ?? "").trim().replace(/^\(|\)$/g, "");
+  const text = String(cell ?? "")
+    .trim()
+    .replace(/^\(|\)$/g, "");
   if (text === "" || text === "-" || text === "*" || text === "Tr") return 0;
   const value = Number(text);
   return Number.isFinite(value) ? value : 0;

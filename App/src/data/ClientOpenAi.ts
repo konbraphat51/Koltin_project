@@ -18,13 +18,7 @@ export class LlmError extends Error {
   }
 }
 
-const instructions = [
-  "You read photos of a food product (front, nutrition facts label, ingredients list) and return its data as JSON.",
-  "Nutrients must be per 100 g (or per 100 ml for drinks). If the label gives values per serving, convert them using the serving size.",
-  "salt: if the label shows sodium (mg) instead of salt equivalent, use sodium_mg * 2.54 / 1000 grams.",
-  "Use 0 for nutrients that are not printed. servingG is the grams per serving, or null if unknown.",
-  "name and brand should be written as printed (Japanese stays Japanese). Return an empty string when unknown.",
-].join("\n");
+const instructions = ["You read photos of a food product (front, nutrition facts label, ingredients list) and return its data as JSON.", "Nutrients must be per 100 g (or per 100 ml for drinks). If the label gives values per serving, convert them using the serving size.", "salt: if the label shows sodium (mg) instead of salt equivalent, use sodium_mg * 2.54 / 1000 grams.", "Use 0 for nutrients that are not printed. servingG is the grams per serving, or null if unknown.", "name and brand should be written as printed (Japanese stays Japanese). Return an empty string when unknown."].join("\n");
 
 export class ClientOpenAi implements ClientLlm {
   constructor(

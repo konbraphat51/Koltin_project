@@ -9,10 +9,7 @@ async function hashKey(value: string): Promise<string> {
 }
 
 async function incrementCount(db: D1Database, key: string, day: string): Promise<number> {
-  const row = await db
-    .prepare("INSERT INTO rate_limits (key_hash, day, count) VALUES (?, ?, 1) ON CONFLICT(key_hash, day) DO UPDATE SET count = count + 1 RETURNING count")
-    .bind(key, day)
-    .first<{ count: number }>();
+  const row = await db.prepare("INSERT INTO rate_limits (key_hash, day, count) VALUES (?, ?, 1) ON CONFLICT(key_hash, day) DO UPDATE SET count = count + 1 RETURNING count").bind(key, day).first<{ count: number }>();
   return row?.count ?? 0;
 }
 

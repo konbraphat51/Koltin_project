@@ -30,7 +30,7 @@ describe("import sql", () => {
     const post = (chainName: string) => app.request("/v1/menu-requests", { method: "POST", headers, body: JSON.stringify({ chainName, menuName: "テリヤキバーガー" }) }, env);
     // different spacing so the normalized menu name differs; matching one uses the exact name
     await post("mos burger");
-    const exact = await (await app.request("/v1/menu-requests", { method: "POST", headers, body: JSON.stringify({ chainName: "Mos Burger", menuName: "テリヤキ バーガー" }) }, env)).json() as { requestId: number };
+    const exact = (await (await app.request("/v1/menu-requests", { method: "POST", headers, body: JSON.stringify({ chainName: "Mos Burger", menuName: "テリヤキ バーガー" }) }, env)).json()) as { requestId: number };
 
     for (const line of buildImportSql(parseCsv(csv)).trim().split("\n")) await env.DB.exec(line);
 

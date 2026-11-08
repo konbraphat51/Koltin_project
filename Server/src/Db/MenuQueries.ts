@@ -55,16 +55,10 @@ export async function searchMenuItems(db: D1Database, query: string, chain: stri
   if (chain) {
     const chainNorm = normalizeText(chain);
     const aliasLike = `%|${escapeLike(chainNorm)}|%`;
-    const { results } = await db
-      .prepare(`${menuItemSelect} WHERE m.name_norm LIKE ? ESCAPE '\\' AND (c.name_norm = ? OR '|' || c.aliases_norm || '|' LIKE ? ESCAPE '\\') ORDER BY m.name LIMIT ?`)
-      .bind(q, chainNorm, aliasLike, limit)
-      .all<MenuItemRow>();
+    const { results } = await db.prepare(`${menuItemSelect} WHERE m.name_norm LIKE ? ESCAPE '\\' AND (c.name_norm = ? OR '|' || c.aliases_norm || '|' LIKE ? ESCAPE '\\') ORDER BY m.name LIMIT ?`).bind(q, chainNorm, aliasLike, limit).all<MenuItemRow>();
     return results.map(toMenuItem);
   }
-  const { results } = await db
-    .prepare(`${menuItemSelect} WHERE m.name_norm LIKE ? ESCAPE '\\' ORDER BY c.name, m.name LIMIT ?`)
-    .bind(q, limit)
-    .all<MenuItemRow>();
+  const { results } = await db.prepare(`${menuItemSelect} WHERE m.name_norm LIKE ? ESCAPE '\\' ORDER BY c.name, m.name LIMIT ?`).bind(q, limit).all<MenuItemRow>();
   return results.map(toMenuItem);
 }
 

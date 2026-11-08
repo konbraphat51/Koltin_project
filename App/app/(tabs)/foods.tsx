@@ -43,7 +43,9 @@ export default function FoodsScreen() {
     <Card>
       <TextHeading>{title}</TextHeading>
       {items.length === 0 ? (
-        <TextBody muted small>{t("foods.empty")}</TextBody>
+        <TextBody muted small>
+          {t("foods.empty")}
+        </TextBody>
       ) : (
         <ListFood
           items={items}

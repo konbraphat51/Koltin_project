@@ -63,14 +63,7 @@ offRoutes.post("/off/images", requireInstallation, limitRate, async (c) => {
   const barcode = body?.["barcode"];
   const imageField = body?.["imagefield"];
   const file = body?.["file"];
-  const isValid =
-    typeof barcode === "string" &&
-    /^\d{8,14}$/.test(barcode) &&
-    typeof imageField === "string" &&
-    allowedImageFields.has(imageField) &&
-    file instanceof File &&
-    file.size <= maxImageBytes &&
-    file.type.startsWith("image/");
+  const isValid = typeof barcode === "string" && /^\d{8,14}$/.test(barcode) && typeof imageField === "string" && allowedImageFields.has(imageField) && file instanceof File && file.size <= maxImageBytes && file.type.startsWith("image/");
   if (!isValid) return c.json({ error: "invalid body" }, 400);
 
   const form = new FormData();

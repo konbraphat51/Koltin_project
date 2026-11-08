@@ -91,7 +91,15 @@ export default function AddScreen() {
         </View>
       </View>
 
-      <Segmented<Tab> options={[{ value: "mine", label: t("add.tabMine") }, { value: "mext", label: t("add.tabMext") }, { value: "chain", label: t("add.tabChain") }]} value={tab} onChange={setTab} />
+      <Segmented<Tab>
+        options={[
+          { value: "mine", label: t("add.tabMine") },
+          { value: "mext", label: t("add.tabMext") },
+          { value: "chain", label: t("add.tabChain") },
+        ]}
+        value={tab}
+        onChange={setTab}
+      />
       <Field label={t("add.searchPlaceholder")} value={query} onChangeText={setQuery} testID="search-input" />
 
       {tab === "mine" ? (
@@ -121,7 +129,9 @@ export default function AddScreen() {
 
       {tab === "mext" ? (
         <>
-          <TextBody muted small>{t("add.mextNote")}</TextBody>
+          <TextBody muted small>
+            {t("add.mextNote")}
+          </TextBody>
           {trimmed !== "" && mextResults.length === 0 ? (
             <TextBody muted>{t("add.noResults")}</TextBody>
           ) : (
@@ -135,7 +145,11 @@ export default function AddScreen() {
       {tab === "chain" ? (
         <>
           <Button label={t("common.search")} onPress={() => void searchChain()} disabled={trimmed === "" || chainState === "loading"} testID="search-chain" />
-          {chainState === "idle" ? <TextBody muted small>{t("add.chainHint")}</TextBody> : null}
+          {chainState === "idle" ? (
+            <TextBody muted small>
+              {t("add.chainHint")}
+            </TextBody>
+          ) : null}
           {chainState === "loading" ? <TextBody muted>{t("common.loading")}</TextBody> : null}
           {chainState === "error" ? <TextBody>{t("add.chainOffline")}</TextBody> : null}
           {chainState === "done" && chainResults.length > 0 ? (
@@ -146,7 +160,9 @@ export default function AddScreen() {
           {chainState === "done" && chainResults.length === 0 ? (
             <Card>
               <TextHeading>{t("add.requestTitle")}</TextHeading>
-              <TextBody muted small>{t("add.requestHint")}</TextBody>
+              <TextBody muted small>
+                {t("add.requestHint")}
+              </TextBody>
               <Field label={t("add.chainName")} value={requestChain} onChangeText={setRequestChain} testID="request-chain" />
               <Field label={t("add.menuName")} value={requestMenuName} onChangeText={setRequestMenuName} />
               <Button label={t("add.requestButton")} onPress={() => void requestMenu()} disabled={requestChain.trim() === "" || requestMenuName.trim() === ""} testID="request-menu" />

@@ -121,11 +121,21 @@ export default function PhotoScreen() {
       ))}
 
       <Button label={status === "reading" ? t("photo.reading") : t("photo.read")} onPress={() => void read()} disabled={status === "reading"} testID="read-ai" />
-      {!hasKey ? <TextBody muted small>{t("photo.needKey")}</TextBody> : null}
+      {!hasKey ? (
+        <TextBody muted small>
+          {t("photo.needKey")}
+        </TextBody>
+      ) : null}
       {message ? <TextBody>{message}</TextBody> : null}
 
       <Field label={t("photo.barcode")} value={barcode} onChangeText={(text) => setBarcode(text.replace(/\D/g, ""))} keyboardType="number-pad" />
-      <FormFood values={values} onChange={(next) => { setValues(next); setHasError(false); }} />
+      <FormFood
+        values={values}
+        onChange={(next) => {
+          setValues(next);
+          setHasError(false);
+        }}
+      />
 
       {/^\d{8,14}$/.test(barcode) ? (
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>

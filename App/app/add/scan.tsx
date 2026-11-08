@@ -48,11 +48,11 @@ export default function ScanScreen() {
           <Button label={t("scan.grant")} onPress={() => void requestPermission()} />
         </View>
       ) : null}
-      {canScan ? (
-        <CameraView style={styles.camera} facing="back" barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8", "upc_a", "upc_e"] }} onBarcodeScanned={(result) => void lookup(result.data)} />
-      ) : null}
+      {canScan ? <CameraView style={styles.camera} facing="back" barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8", "upc_a", "upc_e"] }} onBarcodeScanned={(result) => void lookup(result.data)} /> : null}
 
-      <TextBody muted small>{t("scan.enterManually")}</TextBody>
+      <TextBody muted small>
+        {t("scan.enterManually")}
+      </TextBody>
       <Field label={t("photo.barcode")} value={code} onChangeText={(text) => setCode(text.replace(/\D/g, ""))} keyboardType="number-pad" testID="barcode-input" />
       <Button label={t("scan.lookup")} onPress={() => void lookup(code)} disabled={!/^\d{8,14}$/.test(code)} testID="barcode-lookup" />
 

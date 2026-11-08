@@ -21,16 +21,7 @@
       "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-sqlite",
-      "expo-secure-store",
-      "expo-localization",
-      "expo-status-bar",
-      "expo-background-task",
-      ["expo-camera", { "cameraPermission": "Used to scan barcodes and photograph product labels." }],
-      ["expo-image-picker", { "photosPermission": "Used to select product label photos.", "cameraPermission": "Used to photograph product labels." }]
-    ],
+    "plugins": ["expo-router", "expo-sqlite", "expo-secure-store", "expo-localization", "expo-status-bar", "expo-background-task", ["expo-camera", { "cameraPermission": "Used to scan barcodes and photograph product labels." }], ["expo-image-picker", { "photosPermission": "Used to select product label photos.", "cameraPermission": "Used to photograph product labels." }]],
     "experiments": { "typedRoutes": false }
   }
 }

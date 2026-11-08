@@ -34,7 +34,12 @@ export default function AmountScreen() {
     void food.isFavorite(id).then(setIsFavorite);
   }, [food, foodItemId]);
 
-  if (!item) return <ScreenScroll><TextBody muted>{t("common.loading")}</TextBody></ScreenScroll>;
+  if (!item)
+    return (
+      <ScreenScroll>
+        <TextBody muted>{t("common.loading")}</TextBody>
+      </ScreenScroll>
+    );
 
   const amount = parseNumberText(grams);
   const nutrients = amount ? scaleNutrients(item.per100g, amount) : null;
@@ -49,13 +54,28 @@ export default function AmountScreen() {
     <ScreenScroll>
       <Card>
         <TextHeading>{item.name}</TextHeading>
-        {item.brand ? <TextBody muted small>{item.brand}</TextBody> : null}
-        <Field label={t("amount.grams")} value={grams} onChangeText={(v) => { setGrams(v); setHasError(false); }} keyboardType="decimal-pad" testID="amount-grams" />
+        {item.brand ? (
+          <TextBody muted small>
+            {item.brand}
+          </TextBody>
+        ) : null}
+        <Field
+          label={t("amount.grams")}
+          value={grams}
+          onChangeText={(v) => {
+            setGrams(v);
+            setHasError(false);
+          }}
+          keyboardType="decimal-pad"
+          testID="amount-grams"
+        />
         {item.servingG ? <Button variant="secondary" label={t("amount.oneServing", { g: item.servingG })} onPress={() => setGrams(String(item.servingG))} /> : null}
         {hasError ? <TextBody>{t("amount.invalid")}</TextBody> : null}
       </Card>
 
-      <TextBody muted small>{t("amount.meal")}</TextBody>
+      <TextBody muted small>
+        {t("amount.meal")}
+      </TextBody>
       <Segmented<MealType> options={mealTypes.map((m) => ({ value: m, label: t(`meal.${m}`) }))} value={mealType} onChange={setMealType} />
 
       {nutrients ? (
@@ -72,7 +92,12 @@ export default function AmountScreen() {
 
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <TextBody>{t("amount.favorite")}</TextBody>
-        <Switch value={isFavorite} onValueChange={() => { if (item.id !== null) void food.toggleFavorite(item.id).then(setIsFavorite); }} />
+        <Switch
+          value={isFavorite}
+          onValueChange={() => {
+            if (item.id !== null) void food.toggleFavorite(item.id).then(setIsFavorite);
+          }}
+        />
       </View>
       <Button label={t("common.save")} onPress={() => void save()} testID="amount-save" />
     </ScreenScroll>

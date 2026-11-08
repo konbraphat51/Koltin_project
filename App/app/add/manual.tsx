@@ -37,7 +37,13 @@ export default function ManualScreen() {
 
   return (
     <ScreenScroll>
-      <FormFood values={values} onChange={(next) => { setValues(next); setHasError(false); }} />
+      <FormFood
+        values={values}
+        onChange={(next) => {
+          setValues(next);
+          setHasError(false);
+        }}
+      />
       {hasError ? <TextBody>{t("form.invalid")}</TextBody> : null}
       <Button label={t("common.save")} onPress={() => void save()} testID="manual-save" />
     </ScreenScroll>

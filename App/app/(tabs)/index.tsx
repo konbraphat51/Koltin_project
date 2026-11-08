@@ -63,7 +63,11 @@ export default function TodayScreen() {
         <NutrientBar label={t("nutrient.proteinG")} value={total.proteinG} goal={goal?.proteinG ?? null} unit={t("common.g")} color={palette.protein} goalLabel={goal ? t("today.goal", { value: goal.proteinG }) : undefined} />
         <NutrientBar label={t("nutrient.fatG")} value={total.fatG} goal={goal?.fatG ?? null} unit={t("common.g")} color={palette.fat} goalLabel={goal ? t("today.goal", { value: goal.fatG }) : undefined} />
         <NutrientBar label={t("nutrient.carbohydrateG")} value={total.carbohydrateG} goal={goal?.carbohydrateG ?? null} unit={t("common.g")} color={palette.carbohydrate} goalLabel={goal ? t("today.goal", { value: goal.carbohydrateG }) : undefined} />
-        {!goal ? <TextBody muted small>{t("today.noProfile")}</TextBody> : null}
+        {!goal ? (
+          <TextBody muted small>
+            {t("today.noProfile")}
+          </TextBody>
+        ) : null}
       </Card>
 
       {mealTypes.map((meal: MealType) => {
@@ -80,7 +84,9 @@ export default function TodayScreen() {
               </Pressable>
             </View>
             {items.length === 0 ? (
-              <TextBody muted small>{t("today.empty")}</TextBody>
+              <TextBody muted small>
+                {t("today.empty")}
+              </TextBody>
             ) : (
               items.map((entry) => (
                 <View key={entry.id} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>

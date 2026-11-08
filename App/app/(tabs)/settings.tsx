@@ -73,29 +73,56 @@ export default function SettingsScreen() {
     <ScreenScroll>
       <Card>
         <TextHeading>{t("settings.profile")}</TextHeading>
-        <Segmented<Sex> options={[{ value: "male", label: t("settings.male") }, { value: "female", label: t("settings.female") }]} value={sex} onChange={setSex} />
+        <Segmented<Sex>
+          options={[
+            { value: "male", label: t("settings.male") },
+            { value: "female", label: t("settings.female") },
+          ]}
+          value={sex}
+          onChange={setSex}
+        />
         <Field label={t("settings.age")} value={age} onChangeText={setAge} keyboardType="number-pad" testID="profile-age" />
         <Field label={t("settings.height")} value={height} onChangeText={setHeight} keyboardType="decimal-pad" testID="profile-height" />
         <Field label={t("settings.weight")} value={weight} onChangeText={setWeight} keyboardType="decimal-pad" testID="profile-weight" />
-        <TextBody muted small>{t("settings.activity")}</TextBody>
-        <Segmented<ActivityLevel> options={[{ value: "low", label: t("settings.low") }, { value: "normal", label: t("settings.normal") }, { value: "high", label: t("settings.high") }]} value={activity} onChange={setActivity} />
+        <TextBody muted small>
+          {t("settings.activity")}
+        </TextBody>
+        <Segmented<ActivityLevel>
+          options={[
+            { value: "low", label: t("settings.low") },
+            { value: "normal", label: t("settings.normal") },
+            { value: "high", label: t("settings.high") },
+          ]}
+          value={activity}
+          onChange={setActivity}
+        />
       </Card>
 
       <Card>
         <TextHeading>{t("settings.goals")}</TextHeading>
-        <TextBody muted small>{t("settings.goalsHint")}</TextBody>
+        <TextBody muted small>
+          {t("settings.goalsHint")}
+        </TextBody>
         <Field label={t("settings.overrideEnergy")} value={overrides.energyKcal} placeholder={hint("energyKcal")} onChangeText={(v) => setOverrides({ ...overrides, energyKcal: v })} keyboardType="decimal-pad" testID="goal-energy" />
         <Field label={t("settings.overrideProtein")} value={overrides.proteinG} placeholder={hint("proteinG")} onChangeText={(v) => setOverrides({ ...overrides, proteinG: v })} keyboardType="decimal-pad" />
         <Field label={t("settings.overrideFat")} value={overrides.fatG} placeholder={hint("fatG")} onChangeText={(v) => setOverrides({ ...overrides, fatG: v })} keyboardType="decimal-pad" />
         <Field label={t("settings.overrideCarbs")} value={overrides.carbohydrateG} placeholder={hint("carbohydrateG")} onChangeText={(v) => setOverrides({ ...overrides, carbohydrateG: v })} keyboardType="decimal-pad" />
         <Button label={t("common.save")} onPress={saveProfileAndGoals} testID="save-profile" />
-        {message ? <TextBody small muted>{message}</TextBody> : null}
+        {message ? (
+          <TextBody small muted>
+            {message}
+          </TextBody>
+        ) : null}
       </Card>
 
       <Card>
         <TextHeading>{t("settings.language")}</TextHeading>
         <Segmented<LanguageSetting>
-          options={[{ value: "system", label: t("settings.system") }, { value: "en", label: "English" }, { value: "ja", label: "日本語" }]}
+          options={[
+            { value: "system", label: t("settings.system") },
+            { value: "en", label: "English" },
+            { value: "ja", label: "日本語" },
+          ]}
           value={language}
           onChange={(value) => {
             setLanguage(value);
@@ -108,7 +135,9 @@ export default function SettingsScreen() {
       <Card>
         <TextHeading>{t("settings.ai")}</TextHeading>
         <Field label={t("settings.apiKey")} value={apiKey} onChangeText={setApiKey} secure placeholder={hasKey ? "••••••••" : "sk-…"} testID="api-key" />
-        <TextBody muted small>{t("settings.apiKeyHint")}</TextBody>
+        <TextBody muted small>
+          {t("settings.apiKeyHint")}
+        </TextBody>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <View style={{ flex: 1 }}>
             <Button
@@ -129,18 +158,33 @@ export default function SettingsScreen() {
             </View>
           ) : null}
         </View>
-        <Field label={t("settings.model")} value={model} onChangeText={(value) => { setModel(value); settings.setOpenAiModel(value); }} />
+        <Field
+          label={t("settings.model")}
+          value={model}
+          onChangeText={(value) => {
+            setModel(value);
+            settings.setOpenAiModel(value);
+          }}
+        />
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <View style={{ flex: 1 }}>
             <TextBody>{t("settings.contribute")}</TextBody>
           </View>
-          <Switch value={contribute} onValueChange={(value) => { setContribute(value); settings.setContributeToOff(value); }} />
+          <Switch
+            value={contribute}
+            onValueChange={(value) => {
+              setContribute(value);
+              settings.setContributeToOff(value);
+            }}
+          />
         </View>
       </Card>
 
       <Card>
         <TextHeading>{t("settings.about")}</TextHeading>
-        <TextBody muted small>{t("settings.attribution")}</TextBody>
+        <TextBody muted small>
+          {t("settings.attribution")}
+        </TextBody>
       </Card>
     </ScreenScroll>
   );

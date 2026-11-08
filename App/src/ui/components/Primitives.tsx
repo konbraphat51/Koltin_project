@@ -62,19 +62,7 @@ export function Field({ label, value, onChangeText, keyboardType, placeholder, s
   return (
     <View style={styles.field}>
       <Text style={{ color: palette.textMuted, fontSize: 13 }}>{label}</Text>
-      <TextInput
-        testID={testID}
-        accessibilityLabel={label}
-        value={value}
-        onChangeText={onChangeText}
-        keyboardType={keyboardType}
-        placeholder={placeholder}
-        placeholderTextColor={palette.textMuted}
-        secureTextEntry={secure}
-        autoCapitalize="none"
-        autoCorrect={false}
-        style={[styles.input, { color: palette.text, borderColor: palette.border, backgroundColor: palette.card }]}
-      />
+      <TextInput testID={testID} accessibilityLabel={label} value={value} onChangeText={onChangeText} keyboardType={keyboardType} placeholder={placeholder} placeholderTextColor={palette.textMuted} secureTextEntry={secure} autoCapitalize="none" autoCorrect={false} style={[styles.input, { color: palette.text, borderColor: palette.border, backgroundColor: palette.card }]} />
     </View>
   );
 }

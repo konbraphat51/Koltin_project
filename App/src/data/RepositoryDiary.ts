@@ -10,10 +10,7 @@ export class RepositoryDiary {
   constructor(private readonly db: SqlDatabase) {}
 
   async add(entry: NewDiaryEntry): Promise<number> {
-    const result = await this.db.runAsync(
-      `INSERT INTO diary_entries (date, meal_type, food_item_id, pending_request_id, name, amount_g, ${nutrientColumnList}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [entry.date, entry.mealType, entry.foodItemId, entry.pendingRequestId, entry.name, entry.amountG, ...toNutrientParams(entry.nutrients)],
-    );
+    const result = await this.db.runAsync(`INSERT INTO diary_entries (date, meal_type, food_item_id, pending_request_id, name, amount_g, ${nutrientColumnList}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [entry.date, entry.mealType, entry.foodItemId, entry.pendingRequestId, entry.name, entry.amountG, ...toNutrientParams(entry.nutrients)]);
     return result.lastInsertRowId;
   }
 
@@ -38,9 +35,6 @@ export class RepositoryDiary {
 
   /** Replaces the provisional values of entries waiting on a chain request. */
   async resolvePending(pendingRequestId: number, foodItemId: number, name: string, amountG: number, nutrients: Nutrients): Promise<void> {
-    await this.db.runAsync(
-      `UPDATE diary_entries SET pending_request_id = NULL, food_item_id = ?, name = ?, amount_g = ?, energy_kcal = ?, protein_g = ?, fat_g = ?, carbohydrate_g = ?, fiber_g = ?, salt_g = ? WHERE pending_request_id = ?`,
-      [foodItemId, name, amountG, ...toNutrientParams(nutrients), pendingRequestId],
-    );
+    await this.db.runAsync(`UPDATE diary_entries SET pending_request_id = NULL, food_item_id = ?, name = ?, amount_g = ?, energy_kcal = ?, protein_g = ?, fat_g = ?, carbohydrate_g = ?, fiber_g = ?, salt_g = ? WHERE pending_request_id = ?`, [foodItemId, name, amountG, ...toNutrientParams(nutrients), pendingRequestId]);
   }
 }

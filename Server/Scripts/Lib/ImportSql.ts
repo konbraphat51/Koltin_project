@@ -47,12 +47,8 @@ export function buildImportSql(records: Record<string, string>[]): string {
     const chainId = `(SELECT id FROM chains WHERE name_norm = ${quote(chainNorm)})`;
 
     statements.push(`INSERT INTO chains (name, name_norm, aliases_norm) VALUES (${quote(row.chain)}, ${quote(chainNorm)}, ${quote(aliases)}) ON CONFLICT(name_norm) DO UPDATE SET aliases_norm = CASE WHEN excluded.aliases_norm = '' THEN chains.aliases_norm ELSE excluded.aliases_norm END;`);
-    statements.push(
-      `INSERT INTO menu_items (chain_id, name, name_norm, serving_g, energy_kcal, protein_g, fat_g, carbohydrate_g, fiber_g, salt_g, source_url) VALUES (${chainId}, ${quote(row.name)}, ${quote(nameNorm)}, ${numberOrNull(row.servingG)}, ${row.energyKcal}, ${row.proteinG}, ${row.fatG}, ${row.carbohydrateG}, ${row.fiberG}, ${row.saltG}, ${row.sourceUrl ? quote(row.sourceUrl) : "NULL"}) ON CONFLICT(chain_id, name_norm) DO UPDATE SET name = excluded.name, serving_g = excluded.serving_g, energy_kcal = excluded.energy_kcal, protein_g = excluded.protein_g, fat_g = excluded.fat_g, carbohydrate_g = excluded.carbohydrate_g, fiber_g = excluded.fiber_g, salt_g = excluded.salt_g, source_url = excluded.source_url, updated_at = datetime('now');`,
-    );
-    statements.push(
-      `UPDATE menu_requests SET status = 'resolved', resolved_menu_item_id = (SELECT id FROM menu_items WHERE chain_id = ${chainId} AND name_norm = ${quote(nameNorm)}), updated_at = datetime('now') WHERE menu_norm = ${quote(nameNorm)} AND status = 'open' AND (chain_norm = ${quote(chainNorm)} OR instr('|' || (SELECT aliases_norm FROM chains WHERE name_norm = ${quote(chainNorm)}) || '|', '|' || chain_norm || '|') > 0);`,
-    );
+    statements.push(`INSERT INTO menu_items (chain_id, name, name_norm, serving_g, energy_kcal, protein_g, fat_g, carbohydrate_g, fiber_g, salt_g, source_url) VALUES (${chainId}, ${quote(row.name)}, ${quote(nameNorm)}, ${numberOrNull(row.servingG)}, ${row.energyKcal}, ${row.proteinG}, ${row.fatG}, ${row.carbohydrateG}, ${row.fiberG}, ${row.saltG}, ${row.sourceUrl ? quote(row.sourceUrl) : "NULL"}) ON CONFLICT(chain_id, name_norm) DO UPDATE SET name = excluded.name, serving_g = excluded.serving_g, energy_kcal = excluded.energy_kcal, protein_g = excluded.protein_g, fat_g = excluded.fat_g, carbohydrate_g = excluded.carbohydrate_g, fiber_g = excluded.fiber_g, salt_g = excluded.salt_g, source_url = excluded.source_url, updated_at = datetime('now');`);
+    statements.push(`UPDATE menu_requests SET status = 'resolved', resolved_menu_item_id = (SELECT id FROM menu_items WHERE chain_id = ${chainId} AND name_norm = ${quote(nameNorm)}), updated_at = datetime('now') WHERE menu_norm = ${quote(nameNorm)} AND status = 'open' AND (chain_norm = ${quote(chainNorm)} OR instr('|' || (SELECT aliases_norm FROM chains WHERE name_norm = ${quote(chainNorm)}) || '|', '|' || chain_norm || '|') > 0);`);
   });
   return statements.join("\n") + "\n";
 }
