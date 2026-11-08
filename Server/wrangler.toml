@@ -1,0 +1,16 @@
+name = "nutri-server"
+main = "src/Index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nutri-db"
+database_id = "00000000-0000-0000-0000-000000000000" # replace after `wrangler d1 create nutri-db`
+migrations_dir = "Migrations"
+
+[vars]
+OFF_BASE_URL = "https://world.openfoodfacts.org"
+OFF_USER_ID = ""
+POST_DAILY_LIMIT = "30"
+# Secret: OFF_PASSWORD (wrangler secret put OFF_PASSWORD)
