@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Nutri",
+    "slug": "nutri",
+    "scheme": "nutri",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "app.nutri.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "allowBackup": false
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      "expo-localization",
+      "expo-status-bar",
+      "expo-background-task",
+      ["expo-camera", { "cameraPermission": "Used to scan barcodes and photograph product labels." }],
+      ["expo-image-picker", { "photosPermission": "Used to select product label photos.", "cameraPermission": "Used to photograph product labels." }]
+    ],
+    "experiments": { "typedRoutes": false }
+  }
+}
